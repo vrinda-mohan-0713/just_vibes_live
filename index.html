@@ -19,6 +19,7 @@
   --accent-dim:#1F5F52;
   --live:#FF5C5C;
   --amber:#FFB84D;
+  --smart:#5B9DFF;
   --font-display:'Archivo Expanded', sans-serif;
   --font-body:'Archivo', sans-serif;
   --font-mono:'Roboto Mono', monospace;
@@ -623,6 +624,41 @@ button{
 }
 .waiver-meta{font-size:11.5px;color:var(--text-dim);}
 
+/* ---------- Z-Score Positional Discrepancy Matrix ---------- */
+.zmatrix-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px;}
+.zmatrix{width:100%;border-collapse:collapse;font-size:12.5px;min-width:520px;}
+.zmatrix thead th{
+  text-align:center;
+  font-family:var(--font-display);
+  font-size:11px;
+  letter-spacing:0.3px;
+  text-transform:uppercase;
+  color:var(--text-faint);
+  padding:10px 8px;
+  background:var(--surface-2);
+  border-bottom:1px solid var(--border);
+  white-space:nowrap;
+}
+.zmatrix thead th:first-child{text-align:left;}
+.zmatrix td{padding:8px;border-bottom:1px solid var(--border);text-align:center;white-space:nowrap;}
+.zmatrix tr:last-child td{border-bottom:none;}
+.zteam{text-align:left !important;font-weight:700;font-size:13px;}
+.synergy-rec{
+  text-align:left !important;white-space:normal;min-width:220px;max-width:320px;
+  font-size:12px;color:var(--text-dim);line-height:1.4;
+}
+.zcell{border-radius:6px;}
+.zval{display:block;font-family:var(--font-mono);font-weight:800;font-size:13px;}
+.ztier{display:block;font-size:9px;letter-spacing:0.3px;text-transform:uppercase;opacity:0.85;margin-top:1px;}
+.z-elite{background:color-mix(in srgb, var(--accent) 30%, transparent);color:var(--accent);}
+.z-strong{background:color-mix(in srgb, var(--accent) 16%, transparent);color:var(--accent);}
+.z-above{background:color-mix(in srgb, var(--accent) 8%, transparent);color:var(--text);}
+.z-avg{background:transparent;color:var(--text-dim);}
+.z-below{background:color-mix(in srgb, var(--amber) 10%, transparent);color:var(--text);}
+.z-vuln{background:color-mix(in srgb, var(--amber) 20%, transparent);color:var(--amber);}
+.z-brittle{background:color-mix(in srgb, var(--live) 24%, transparent);color:var(--live);}
+
+
 /* ---------- Jump nav (analysis tab quick-scroll) ---------- */
 .jump-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
 .jump-btn{
@@ -1040,6 +1076,21 @@ button{
   padding:1px 4px;
   letter-spacing:0.3px;
 }
+.player-meta{
+  font-size:11px;
+  color:var(--text-faint);
+  white-space:nowrap;
+}
+.bench-tag{
+  color:var(--text-dim);
+  border-color:var(--border);
+}
+.player-statline{
+  font-size:11px;
+  color:var(--text-dim);
+  margin-top:3px;
+  font-family:var(--font-mono);
+}
 
 .empty-state{
   text-align:center;
@@ -1083,6 +1134,33 @@ button{
   grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
   gap:14px;
 }
+/* ---------- Top scorers panel (Live Now, started vs bench) ---------- */
+.top-scorers-panel{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:14px;
+  margin:14px 0 22px;
+}
+.top-scorer-col{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px 14px 14px;
+}
+.top-scorer-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:7px 0;
+  border-top:1px solid rgba(255,255,255,0.05);
+}
+.top-scorer-row:first-of-type{border-top:none;}
+.top-scorer-pts{
+  font-family:var(--font-mono);
+  font-weight:700;
+  font-size:14px;
+  flex:none;
+}
 .hl-compact-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
@@ -1107,12 +1185,14 @@ button{
 .hl-card-head.winner{color:var(--accent);background:color-mix(in srgb, var(--accent) 14%, var(--surface));}
 .hl-card-head.loser{color:var(--live);background:color-mix(in srgb, var(--live) 14%, var(--surface));}
 .hl-card-head.bench{color:var(--amber);background:color-mix(in srgb, var(--amber) 14%, var(--surface));}
+.hl-card-head.smartest{color:var(--smart);background:color-mix(in srgb, var(--smart) 14%, var(--surface));}
 .hl-card-body{
   display:flex;
   align-items:center;
   gap:14px;
   padding:16px;
 }
+.hl-card-body-team{padding:20px 16px;}
 .hl-headshot{
   border-radius:10px;
   object-fit:cover;
@@ -1374,6 +1454,28 @@ button{
   #visitCounterBadge img{height:18px;}
 }
 
+/* ---------- Version badge (fixed corner, opposite the visit counter) ---------- */
+#versionBadge{
+  position:fixed;
+  bottom:12px;
+  left:12px;
+  z-index:50;
+  opacity:0.55;
+  transition:opacity .15s ease;
+  font-family:var(--font-mono);
+  font-size:11px;
+  color:var(--text-dim);
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  padding:3px 8px;
+  border-radius:6px;
+  user-select:text;
+}
+#versionBadge:hover{opacity:1;}
+@media (max-width:600px){
+  #versionBadge{bottom:8px;left:8px;font-size:10px;padding:2px 6px;}
+}
+
 #eventOverlayHost{
   position:fixed;
   inset:0;
@@ -1427,6 +1529,55 @@ button{
 .drawer-player-row:last-child{border-bottom:none;}
 .drawer-player-name{flex:1;min-width:0;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .drawer-player-pts{font-family:var(--font-mono);color:var(--text-dim);flex:none;width:36px;text-align:right;}
+#missedModalHost{position:fixed;inset:0;z-index:950;display:flex;align-items:center;justify-content:center;padding:20px;}
+.missed-backdrop{position:absolute;inset:0;background:rgba(0,0,0,0.68);}
+.missed-modal{
+  position:relative;width:min(560px,100%);max-height:85vh;display:flex;flex-direction:column;
+  background:var(--bg);border:1px solid var(--border);border-radius:16px;overflow:hidden;
+  animation:missedPopIn 0.22s ease-out;box-shadow:0 20px 60px rgba(0,0,0,0.5);
+}
+@keyframes missedPopIn{ from{ transform:translateY(12px) scale(0.98); opacity:0; } to{ transform:translateY(0) scale(1); opacity:1; } }
+.missed-head{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:12px;
+  padding:18px 20px;border-bottom:1px solid var(--border);flex:none;
+  background:linear-gradient(180deg, rgba(63,214,184,0.08), transparent);
+}
+.missed-head h3{font-family:var(--font-display);font-size:18px;font-weight:800;}
+.missed-head .sub{font-size:12.5px;color:var(--text-dim);margin-top:4px;}
+.missed-close{
+  background:var(--surface-2);border:1px solid var(--border);color:var(--text-dim);
+  width:30px;height:30px;border-radius:8px;font-size:14px;cursor:pointer;flex:none;
+}
+.missed-close:hover{color:var(--text);border-color:var(--accent);}
+.missed-body{flex:1;overflow-y:auto;padding:16px 20px 20px;}
+.missed-section-title{
+  font-size:11px;font-weight:800;letter-spacing:0.4px;text-transform:uppercase;
+  color:var(--text-faint);margin:16px 0 8px;
+}
+.missed-section-title:first-child{margin-top:0;}
+.missed-alert-row{
+  display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:12.5px;
+}
+.missed-alert-row:last-child{border-bottom:none;}
+.missed-alert-icon{flex:none;font-size:15px;}
+.missed-alert-text{flex:1;min-width:0;color:var(--text-dim);}
+.missed-alert-text b{color:var(--text);}
+.missed-alert-time{flex:none;font-family:var(--font-mono);font-size:10.5px;color:var(--text-faint);}
+.missed-top5-row{
+  display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);
+}
+.missed-top5-row:last-child{border-bottom:none;}
+.missed-top5-rank{
+  flex:none;width:20px;text-align:center;font-family:var(--font-mono);font-weight:800;
+  color:var(--text-faint);font-size:13px;
+}
+.missed-top5-info{flex:1;min-width:0;}
+.missed-top5-name{font-size:13px;font-weight:600;}
+.missed-top5-sub{font-size:11.5px;color:var(--text-dim);margin-top:1px;}
+.missed-top5-pts{font-family:var(--font-mono);font-weight:700;font-size:15px;flex:none;}
+.missed-empty{color:var(--text-faint);font-size:12.5px;text-align:center;padding:14px 0;}
+.missed-footer{padding:14px 20px;border-top:1px solid var(--border);flex:none;text-align:right;}
+
 .def-rank-badge{
   font-family:var(--font-mono);font-size:10px;font-weight:700;flex:none;white-space:nowrap;
   color:var(--text-faint);background:var(--surface-2);border:1px solid var(--border);
@@ -1671,6 +1822,10 @@ button{
   <img src="https://visitor-badge.laobi.icu/badge?page_id=CHANGE-ME-yourusername-sleeper-live&left_color=1f2430&right_color=2dd4bf" alt="Site visits" />
 </div>
 
+<!-- Version badge — bump APP_VERSION below each time you ship changes, so you can always
+     tell (by eye, or by view-source) exactly which build is loaded in any given browser tab. -->
+<div id="versionBadge" title="Build version"></div>
+
 <div class="sticky-header" id="stickyHeader">
   <div class="topbar" id="topbar" style="display:none;">
     <div class="brand">
@@ -1799,12 +1954,6 @@ button{
         <div class="feature-card-title">Trade Recommendations</div>
         <div class="feature-card-desc">Finds teams whose surplus matches your need, and vice versa — trades both sides should actually want.</div>
         <div class="feature-card-cta">See trade ideas →</div>
-      </div>
-      <div class="feature-card" data-tab="tabAnalysis" data-section="sectionWaiverRecs">
-        <div class="feature-card-icon">📈</div>
-        <div class="feature-card-title">Waiver Wire Targets</div>
-        <div class="feature-card-desc">Free agents ranked by projected value and how fast the rest of the league is adding them.</div>
-        <div class="feature-card-cta">See waiver targets →</div>
       </div>
       <div class="feature-card" data-tab="tabAnalysis" data-section="sectionSandbox">
         <div class="feature-card-icon">🧪</div>
@@ -1965,6 +2114,7 @@ button{
 
 <div id="eventOverlayHost"></div>
 <div id="matchupDrawerHost" style="display:none;"></div>
+<div id="missedModalHost" style="display:none;"></div>
 
 <script>
 (function(){
@@ -1982,6 +2132,11 @@ button{
   const DEFAULT_LEAGUE_ID = '1323163164086390784';
   const TD_FIELDS = ['pass_td','rush_td','rec_td','pass_2pt','rush_2pt','rec_2pt'];
   const SACK_FIELDS = ['pass_sack','sack_yd']; // best-effort: Sleeper exposes sacks-taken on some QB stat lines
+  // Bump this string every time you ship a change. The footer badge (bottom-left) always
+  // shows whatever is loaded, so you can tell at a glance whether a given tab/device has
+  // picked up the latest version.
+  const APP_VERSION = '2.4.0';
+
   const MAX_FANTASY_FEED = 40; // cumulative TD/sack alerts can run higher across a full slate
   const MAX_PLAY_FEED = 12;    // recent-plays-across-live-games ticker stays short
 
@@ -2498,6 +2653,109 @@ button{
     if(host){ host.style.display = 'none'; host.innerHTML = ''; }
   }
 
+  // ---------- "What You Missed So Far" catch-up modal ----------
+  // Shown once, right after boot, when someone opens the page mid-game instead of at kickoff —
+  // rather than letting every already-happened alert queue up as its own full-screen overlay
+  // (see pushEvent/processEventQueue above), this rolls the whole backlog into a single,
+  // dismissible summary: every alert logged so far this week, plus the top 5 highest-scoring
+  // rostered players currently on the field or already done. Nothing here re-triggers the
+  // TD/sack/injury overlay animations — it only reads state that's already been populated by
+  // the normal boot sequence (loadPersistedEvents / refresh / backfillInjuriesFromPlayByPlay).
+  function missedAlertIcon(type){
+    return type === 'td' ? '🏈' : type === 'sack' ? '💀' : type === 'int' ? '🔁' : '🚑';
+  }
+  function missedAlertVerb(ev){
+    if(ev.type === 'td') return 'TOUCHDOWN';
+    if(ev.type === 'sack') return 'SACKED';
+    if(ev.type === 'int') return 'INTERCEPTED';
+    return (ev.status ? ev.status.toUpperCase() : 'INJURY UPDATE');
+  }
+  function topScorersForMissedModal(n){
+    // Every rostered player who has actually put up points this week, live or finished —
+    // not just the ones currently on the field, so a top scorer whose game already went final
+    // still shows up here.
+    return buildWeekPlayerPool()
+      .filter(pr=> pr.points > 0)
+      .sort((a,b)=> b.points - a.points)
+      .slice(0, n || 5);
+  }
+  function renderMissedModal(){
+    const alerts = state.playFeed || [];
+    const top5 = topScorersForMissedModal(5);
+    const gamesLive = state.liveTeams ? state.liveTeams.size : 0;
+
+    const alertsHtml = alerts.length
+      ? alerts.slice(0, 25).map(ev=> `
+        <div class="missed-alert-row">
+          <span class="missed-alert-icon">${missedAlertIcon(ev.type)}</span>
+          <span class="missed-alert-text"><b>${escapeHtml(ev.name)}</b> — ${escapeHtml(missedAlertVerb(ev))} <span style="color:var(--text-faint)">(${escapeHtml(ev.fantasyTeam)})</span></span>
+          <span class="missed-alert-time">${escapeHtml(ev.time || '')}</span>
+        </div>`).join('')
+      : '<div class="missed-empty">No touchdown, sack, INT or injury alerts logged yet today.</div>';
+
+    const top5Html = top5.length
+      ? top5.map((pr,i)=>{
+          const p = pr.player;
+          const abbr = normAbbr(p.team) || '';
+          return `
+        <div class="missed-top5-row">
+          <span class="missed-top5-rank">${i+1}</span>
+          ${headshotHtml(pr.playerId, 36)}
+          <div class="missed-top5-info">
+            <div class="missed-top5-name">${escapeHtml(playerDisplayName(p))}</div>
+            <div class="missed-top5-sub">${escapeHtml(p.position||'')} · ${escapeHtml(abbr)} · ${escapeHtml(pr.fantasyTeam)}${pr.isStarter ? ' · <span style="color:var(--amber);">STARTER</span>' : ' · BENCH'}</div>
+          </div>
+          <div class="missed-top5-pts">${pr.points.toFixed(1)}</div>
+        </div>`;
+        }).join('')
+      : '<div class="missed-empty">No rostered players have scored yet.</div>';
+
+    return `
+      <div class="missed-backdrop"></div>
+      <div class="missed-modal">
+        <div class="missed-head">
+          <div>
+            <h3>What you missed so far</h3>
+            <div class="sub">${gamesLive} NFL team${gamesLive===1?'':'s'} currently live · Week ${state.week} · ${alerts.length} alert${alerts.length===1?'':'s'} logged today</div>
+          </div>
+          <button type="button" class="missed-close" aria-label="Close">✕</button>
+        </div>
+        <div class="missed-body">
+          <div class="missed-section-title">Alerts so far</div>
+          ${alertsHtml}
+          <div class="missed-section-title">Top 5 scorers — rostered &amp; playing</div>
+          ${top5Html}
+        </div>
+        <div class="missed-footer">
+          <button type="button" class="btn btn-accent missed-close">Got it</button>
+        </div>
+      </div>`;
+  }
+  function closeMissedModal(){
+    const host = $('#missedModalHost');
+    if(host){ host.style.display = 'none'; host.innerHTML = ''; }
+  }
+  function showMissedModal(){
+    const host = $('#missedModalHost');
+    if(!host) return;
+    host.innerHTML = renderMissedModal();
+    host.style.display = 'flex';
+    host.addEventListener('click', (e)=>{
+      if(e.target.closest('.missed-close') || e.target.classList.contains('missed-backdrop')) closeMissedModal();
+    }, { once:false });
+  }
+  // Decides whether there's actually anything worth catching up on: at least one live NFL
+  // team right now, and either a logged alert or a rostered player who's already scored —
+  // otherwise this is effectively kickoff and there's nothing to miss.
+  function maybeShowMissedModal(){
+    const gamesLive = state.liveTeams ? state.liveTeams.size : 0;
+    if(gamesLive === 0) return;
+    const hasAlerts = (state.playFeed || []).length > 0;
+    const hasScoring = buildWeekPlayerPool().some(pr=> pr.points > 0);
+    if(!hasAlerts && !hasScoring) return;
+    showMissedModal();
+  }
+
   // ---------- Live event detection (touchdowns / sacks) ----------
   function buildRosteredPidMap(){
     const map = {};
@@ -2687,7 +2945,11 @@ button{
         state.injuryStatus = data.injuryStatus || {};
         state.injuryPrimed = !!Object.keys(state.injuryStatus).length;
         state.injuryTextSeen = data.injuryTextSeen || {};
+        state.recentPlays = Array.isArray(data.recentPlays) ? data.recentPlays : [];
+        state.lastPlayByGame = data.lastPlayByGame || {};
+        state.livePlaysPrimed = !!state.recentPlays.length;
         renderPlayFeed();
+        renderLivePlays();
         return true;
       }
     }catch(e){ /* nothing persisted yet for this league/week — that's fine */ }
@@ -2700,7 +2962,9 @@ button{
         playFeed: state.playFeed,
         lastStats: state.lastStats,
         injuryStatus: state.injuryStatus,
-        injuryTextSeen: state.injuryTextSeen
+        injuryTextSeen: state.injuryTextSeen,
+        recentPlays: state.recentPlays,
+        lastPlayByGame: state.lastPlayByGame
       }));
     }catch(e){ /* best-effort only */ }
   }
@@ -2718,6 +2982,13 @@ button{
   function renderPlayFeed(){
     const el = $('#playFeed');
     if(!el) return;
+    // Alerts are scoped to live play, not the whole week: once nothing is live, the panel
+    // goes back to its empty state even though the underlying data is still persisted (so
+    // reconnecting mid-game recovers the feed instead of losing it).
+    if(!state.liveTeams || state.liveTeams.size === 0){
+      el.innerHTML = '<div class="feed-empty">No live games right now — alerts will resume once a game kicks off.</div>';
+      return;
+    }
     if(!state.playFeed.length){
       el.innerHTML = '<div class="feed-empty">Watching for touchdowns, sacks, INTs &amp; injuries…</div>';
       return;
@@ -3000,6 +3271,7 @@ button{
     if(state.recentPlays.length > MAX_PLAY_FEED) state.recentPlays.length = MAX_PLAY_FEED;
     state.livePlaysPrimed = true;
     renderLivePlays();
+    savePersistedEvents();
   }
 
   function renderLivePlays(){
@@ -3153,6 +3425,28 @@ button{
     return p.first_name ? `${p.first_name} ${p.last_name}` : (p.full_name || 'Unknown player');
   }
 
+  // Height/weight/age line for player cards, using whatever Sleeper's player payload already
+  // has (no extra API calls). Skipped for DEF (team defenses have no physical stats) and for
+  // any field that's missing/zero rather than showing a misleading blank.
+  function physicalMetaLine(p){
+    if(!p || p.position === 'DEF') return '';
+    const parts = [];
+    if(p.height){
+      const inches = parseInt(p.height, 10);
+      if(!isNaN(inches) && inches > 0){
+        parts.push(`${Math.floor(inches/12)}'${inches%12}"`);
+      }else if(typeof p.height === 'string' && p.height.includes("'")){
+        parts.push(p.height);
+      }
+    }
+    if(p.weight){
+      const lbs = parseInt(p.weight, 10);
+      if(!isNaN(lbs) && lbs > 0) parts.push(`${lbs} lb`);
+    }
+    if(p.age) parts.push(`${p.age}y`);
+    return parts.join(' · ');
+  }
+
   // Every rostered player for the week (starters + bench), regardless of live status —
   // used for highlights, which look back at the whole week rather than the live field.
   function buildWeekPlayerPool(){
@@ -3231,16 +3525,23 @@ button{
     return { total, used };
   }
 
-  // Per fantasy team: optimal lineup score minus what was actually started. Returns the
-  // team that left the most points on their bench, plus the single bench player to feature.
-  function computeBenchLeftBehind(pool){
+  // Per fantasy team: optimal lineup score minus what was actually started. Shared by both
+  // "Most Left On Bench" and "Smartest Team" so they're always computed from the same pool
+  // and can never disagree about a team's diff.
+  //
+  // BUG FIX: this used to be fed only "played" pools filtered to games that had fully ended,
+  // which silently excluded any bench player whose NFL game was still in progress — so a huge
+  // bench game mid-flight (e.g. Jalen Coker) never counted as "left on bench" until his game
+  // finished. Callers should now pass the FULL week pool (buildWeekPlayerPool()); Sleeper's
+  // points update live, so in-progress players' current point totals are already meaningful.
+  function computeBenchDiffsByTeam(pool){
     const byRoster = {};
     pool.forEach(pr=>{
       if(!byRoster[pr.rosterId]) byRoster[pr.rosterId] = [];
       byRoster[pr.rosterId].push(pr);
     });
 
-    let best = null;
+    const results = [];
     Object.keys(byRoster).forEach(rid=>{
       const list = byRoster[rid];
       const actual = list.filter(pr=>pr.isStarter).reduce((s,pr)=> s + pr.points, 0);
@@ -3252,11 +3553,31 @@ button{
         if(!pr.isStarter && (!benchStar || pr.points > benchStar.points)) benchStar = pr;
       });
 
-      if(benchStar && diff > 0.01 && (!best || diff > best.diff)){
-        best = { fantasyTeam: list[0].fantasyTeam, diff, benchStar };
-      }
+      results.push({ rosterId: rid, fantasyTeam: list[0].fantasyTeam, diff, actual, optimal, benchStar });
+    });
+    return results;
+  }
+
+  // Team that left the most points stranded on the bench, plus the single bench player to feature.
+  function computeBenchLeftBehind(pool){
+    const diffs = computeBenchDiffsByTeam(pool);
+    let best = null;
+    diffs.forEach(d=>{
+      if(d.benchStar && d.diff > 0.01 && (!best || d.diff > best.diff)) best = d;
     });
     return best;
+  }
+
+  // The flip side: team that left the LEAST on the bench — i.e. ran the closest thing to an
+  // optimal lineup this week. Ties toward whichever team has been evaluated first is fine since
+  // exact ties are rare with real point totals.
+  function computeSmartestTeam(pool){
+    const diffs = computeBenchDiffsByTeam(pool);
+    let smartest = null;
+    diffs.forEach(d=>{
+      if(!smartest || d.diff < smartest.diff) smartest = d;
+    });
+    return smartest;
   }
 
   function buildInjuryReport(pool){
@@ -3289,7 +3610,10 @@ button{
     });
 
     let winner = null;
-    playedPool.forEach(pr=>{ if(!winner || pr.points > winner.points) winner = pr; });
+    // BUG FIX: this used to scan the whole played pool (starters AND bench), so a huge bench
+    // game could win "Biggest Winner" despite never actually scoring for anyone. "Winner"
+    // should mean a player who actually put points on a fantasy scoreboard — i.e. a starter.
+    playedPool.filter(pr=>pr.isStarter).forEach(pr=>{ if(!winner || pr.points > winner.points) winner = pr; });
 
     let loser = null;
     playedPool.filter(pr=>pr.isStarter).forEach(pr=>{ if(!loser || pr.points < loser.points) loser = pr; });
@@ -3311,12 +3635,17 @@ button{
       if(sk > sackCount){ sackCount = sk; sackLeader = pr; }
     });
 
-    const benchResult = computeBenchLeftBehind(playedPool);
+    // Bench diffs use the FULL week pool (not just finished games) — an in-progress bench
+    // player's current live points already reflect real production, so excluding them just
+    // to wait for the game clock to hit 0:00 would hide exactly the cases (huge bench game
+    // still live) that matter most.
+    const benchResult = computeBenchLeftBehind(fullPool);
+    const smartestTeam = computeSmartestTeam(fullPool);
     const injuries = buildInjuryReport(fullPool);
     const { total: totalGames, completed: gamesCompleted, allDone } = gameCounts();
 
     return { winner, loser, tdLeader, tdCount: Math.round(tdCount), sackLeader, sackCount: Math.round(sackCount),
-      benchResult, injuries, totalGames, gamesCompleted, allDone };
+      benchResult, smartestTeam, injuries, totalGames, gamesCompleted, allDone };
   }
 
   function statLineForPlayer(pid, position){
@@ -3349,6 +3678,7 @@ button{
     const abbr = normAbbr(p.team) || '';
     const stats = statLineForPlayer(pr.playerId, p.position);
     const statHtml = stats.map(([lab,val])=> `<div class="hl-stat"><b>${val}</b> ${escapeHtml(lab)}</div>`).join('');
+    const meta = physicalMetaLine(p);
     return `
       <div class="hl-card">
         <div class="hl-card-head ${kind}">${escapeHtml(label)}</div>
@@ -3356,7 +3686,7 @@ button{
           ${headshotHtml(pr.playerId, 64)}
           <div class="hl-info">
             <div class="hl-player-name">${escapeHtml(name)}</div>
-            <div class="hl-player-sub">${escapeHtml(p.position || '')} · ${escapeHtml(abbr)} · ${escapeHtml(pr.fantasyTeam)}</div>
+            <div class="hl-player-sub">${escapeHtml(p.position || '')} · ${escapeHtml(abbr)} · ${escapeHtml(pr.fantasyTeam)}${meta ? ' · ' + escapeHtml(meta) : ''}</div>
           </div>
           <div class="hl-points">${pr.points.toFixed(1)}<span>PTS</span></div>
         </div>
@@ -3370,15 +3700,33 @@ button{
     const p = pr.player;
     const name = playerDisplayName(p);
     const abbr = normAbbr(p.team) || '';
+    const meta = physicalMetaLine(p);
     return `
       <div class="hl-compact">
         ${headshotHtml(pr.playerId, 48)}
         <div class="hl-info">
           <div class="hl-player-name" style="font-size:14px;">${escapeHtml(name)}</div>
-          <div class="hl-player-sub">${escapeHtml(p.position || '')} · ${escapeHtml(abbr)}</div>
+          <div class="hl-player-sub">${escapeHtml(p.position || '')} · ${escapeHtml(abbr)}${meta ? ' · ' + escapeHtml(meta) : ''}</div>
           <div class="hl-compact-label">${escapeHtml(label)}</div>
         </div>
         <div class="hl-compact-num">${num}<span class="hl-compact-unit">${escapeHtml(unit)}</span></div>
+      </div>`;
+  }
+
+  // Team-level highlight card (no single "featured player" — e.g. Smartest Team, where the
+  // headline stat belongs to the whole roster's lineup decisions, not one player's box score).
+  function teamStatCard(kind, label, teamName, statValue, statUnit, note){
+    if(!teamName) return '';
+    return `
+      <div class="hl-card">
+        <div class="hl-card-head ${kind}">${escapeHtml(label)}</div>
+        <div class="hl-card-body hl-card-body-team">
+          <div class="hl-info">
+            <div class="hl-player-name">${escapeHtml(teamName)}</div>
+          </div>
+          <div class="hl-points">${statValue}<span>${escapeHtml(statUnit)}</span></div>
+        </div>
+        ${note ? `<div class="hl-empty-note">${note}</div>` : ''}
       </div>`;
   }
 
@@ -3413,6 +3761,13 @@ button{
       html += featuredHighlightCard('bench', 'Most Left On Bench', h.benchResult.benchStar,
         `Left <b>${h.benchResult.diff.toFixed(1)} pts</b> stranded on ${escapeHtml(h.benchResult.fantasyTeam)}'s bench`);
     }
+    if(h.smartestTeam){
+      html += teamStatCard('smartest', 'Smartest Team', h.smartestTeam.fantasyTeam,
+        h.smartestTeam.diff.toFixed(1), 'PTS LEFT ON BENCH',
+        h.smartestTeam.diff <= 0.01
+          ? 'Started the exact optimal lineup this week.'
+          : `Only <b>${h.smartestTeam.diff.toFixed(1)} pts</b> away from a perfect lineup.`);
+    }
     html += '</div>';
 
     const tdCard = compactHighlightCard('Most Touchdowns', h.tdLeader, h.tdCount, h.tdCount === 1 ? 'TD' : 'TDs');
@@ -3442,6 +3797,52 @@ button{
     content.innerHTML = html;
   }
 
+  // Top 3 started scorers and top 3 bench scorers for the week so far, shown just below
+  // the "N players across N teams" subline on Live Now. Uses the full week pool (not just
+  // currently-live players) so it still means something once some games have finished.
+  function renderTopScorersPanel(){
+    const pool = buildWeekPlayerPool();
+    const started = pool.filter(pr=>pr.isStarter).sort((a,b)=> b.points - a.points).slice(0,3);
+    const bench = pool.filter(pr=>!pr.isStarter).sort((a,b)=> b.points - a.points).slice(0,3);
+
+    const wrap = document.createElement('div');
+    wrap.className = 'top-scorers-panel';
+    if(!started.length && !bench.length) return wrap;
+
+    function scorerRow(pr){
+      const p = pr.player;
+      const meta = physicalMetaLine(p);
+      return `<div class="top-scorer-row">
+        ${headshotHtml(pr.playerId, 36)}
+        <div class="hl-info">
+          <div class="hl-player-name" style="font-size:13px;">${escapeHtml(playerDisplayName(p))}</div>
+          <div class="hl-player-sub">${escapeHtml(p.position||'')} · ${escapeHtml(normAbbr(p.team)||'')} · ${escapeHtml(pr.fantasyTeam)}${meta ? ' · ' + escapeHtml(meta) : ''}</div>
+        </div>
+        <div class="top-scorer-pts">${pr.points.toFixed(1)}</div>
+      </div>`;
+    }
+    function col(title, list){
+      if(!list.length) return '';
+      return `<div class="top-scorer-col">
+        <div class="hl-section-title" style="margin:0 0 8px;">${escapeHtml(title)}</div>
+        ${list.map(scorerRow).join('')}
+      </div>`;
+    }
+
+    wrap.innerHTML = col('Top Started Scorers', started) + col('Top Bench Scorers', bench);
+    return wrap;
+  }
+
+  // Compact "12/18, 145 YDS, 2 TD"-style line for the Live Now player rows, built from the
+  // same statLineForPlayer() box score used on the weekly highlight cards. Only non-zero
+  // entries are shown, and it's omitted entirely when nothing's live for that player yet.
+  function compactStatLine(pid, position){
+    const stats = statLineForPlayer(pid, position);
+    const nonZero = stats.filter(([,val])=> val);
+    if(!nonZero.length) return '';
+    return nonZero.map(([label,val])=> `${val} ${label}`).join(' · ');
+  }
+
   function renderMain(){
     const players = collectVisiblePlayers();
     const sub = $('#liveSubline');
@@ -3466,7 +3867,7 @@ button{
     }
 
     if(players.length === 0){
-      sub.textContent = `${state.liveTeams.size} NFL game${state.liveTeams.size===1?'':'s'} live · no rostered players on the field`;
+      sub.textContent = `${state.liveTeams.size} NFL team${state.liveTeams.size===1?'':'s'} live · no rostered players on the field`;
       content.innerHTML = `
         <div class="empty-state">
           <div class="mark"></div>
@@ -3476,7 +3877,7 @@ button{
       return;
     }
 
-    sub.textContent = `${players.length} player${players.length===1?'':'s'} on the field across ${state.liveTeams.size} live game${state.liveTeams.size===1?'':'s'}`;
+    sub.textContent = `${players.length} player${players.length===1?'':'s'} on the field across ${state.liveTeams.size} team${state.liveTeams.size===1?'':'s'}`;
 
     // group by NFL team
     const byTeam = {};
@@ -3486,7 +3887,18 @@ button{
       byTeam[abbr].push(pr);
     });
 
-    const teamAbbrs = Object.keys(byTeam).sort();
+    // Alphabetical by default, but any team currently in the red zone jumps to the top —
+    // that's the moment most likely to matter right now, so it shouldn't be buried.
+    const teamAbbrs = Object.keys(byTeam).sort((a,b)=>{
+      const aRZ = state.redZoneTeams && state.redZoneTeams.has(a);
+      const bRZ = state.redZoneTeams && state.redZoneTeams.has(b);
+      if(aRZ && !bRZ) return -1;
+      if(bRZ && !aRZ) return 1;
+      return a.localeCompare(b);
+    });
+
+    content.appendChild(renderTopScorersPanel());
+
     teamAbbrs.forEach(abbr=>{
       const rows = byTeam[abbr].sort((a,b)=> b.points - a.points);
       const color = TEAM_COLORS[abbr] || '#3FD6B8';
@@ -3514,14 +3926,23 @@ button{
         const name = p.first_name ? `${p.first_name} ${p.last_name}` : (p.full_name || 'Unknown player');
         const row = document.createElement('div');
         row.className = 'player-row' + (inRedZone && ['QB','RB','WR','TE'].includes(p.position) ? ' redzone' : '');
+        const meta = physicalMetaLine(p);
+        // "Start/rostered" status plus a live stat line where Sleeper's week stats have it —
+        // starters get the amber STARTER tag (existing), bench/rostered players now get an
+        // explicit ROSTERED tag instead of no tag at all, and both get whatever real box-score
+        // production is available (rushing/receiving/passing lines, sacks, etc.) so the Live Now
+        // list isn't just a bare fantasy-point number.
+        const statLine = compactStatLine(pr.playerId, p.position);
         row.innerHTML = `
           <div class="jersey">${jerseySVG(color, color2, p.number)}</div>
           <div class="player-id">
             <div class="player-name">${escapeHtml(name)}</div>
             <div class="player-sub">
               <span class="pos-chip">${escapeHtml(p.position||'')}</span>
-              ${pr.isStarter ? '<span class="starter-tag">STARTER</span>' : ''}
+              ${pr.isStarter ? '<span class="starter-tag">STARTER</span>' : '<span class="starter-tag bench-tag">ROSTERED</span>'}
+              ${meta ? `<span class="player-meta">${escapeHtml(meta)}</span>` : ''}
             </div>
+            ${statLine ? `<div class="player-statline">${escapeHtml(statLine)}</div>` : ''}
           </div>
           <div class="fteam-badge" title="${escapeHtml(pr.fantasyTeam)}">${escapeHtml(pr.fantasyTeam)}</div>
           <div class="player-pts">${pr.points.toFixed(2)}</div>`;
@@ -4078,9 +4499,23 @@ button{
     return { total, depth: all.length };
   }
 
+  // Skill-position bench value used for the Bench Depth Z-score — "next-man-up" strength: how
+  // much real value is sitting on this team's bench if a starter goes down. QB/RB/WR/TE only,
+  // since that's the "next man up" question that actually matters in practice.
+  const BENCH_DEPTH_POSITIONS = ['QB','RB','WR','TE'];
+  function teamBenchDepthValue(t, weekProjections, scoring, hist, rosWeekMaps){
+    let total = 0;
+    (t.bench || []).forEach(x=>{
+      if(!BENCH_DEPTH_POSITIONS.includes(x.player.position)) return;
+      total += playerGradingValue(x, weekProjections, scoring, hist, rosWeekMaps);
+    });
+    return total;
+  }
+
   function computePositionalSurplusNeed(teams, weekProjections, scoring, hist, rosWeekMaps){
     const byTeam = {};
     const totalsByPos = {}; ANALYSIS_POSITIONS.forEach(p=> totalsByPos[p] = []);
+    const benchTotals = [];
     teams.forEach(t=>{
       byTeam[t.rosterId] = {};
       ANALYSIS_POSITIONS.forEach(pos=>{
@@ -4088,11 +4523,23 @@ button{
         byTeam[t.rosterId][pos] = { total, depth };
         totalsByPos[pos].push(total);
       });
+      const benchValue = teamBenchDepthValue(t, weekProjections, scoring, hist, rosWeekMaps);
+      byTeam[t.rosterId].BENCH = { total: benchValue, depth: (t.bench || []).filter(x=> BENCH_DEPTH_POSITIONS.includes(x.player.position)).length };
+      benchTotals.push(benchValue);
     });
     const leagueAvg = {};
-    ANALYSIS_POSITIONS.forEach(pos=>{
-      const arr = totalsByPos[pos];
-      leagueAvg[pos] = arr.reduce((s,v)=> s + v, 0) / (arr.length || 1);
+    // Population standard deviation per position group (and bench depth), across every team in
+    // the league — the denominator for the Z-Score Positional Discrepancy Matrix. Guarded
+    // against a zero-variance league (e.g. a 1-team test league) by leaving it at 0, which the
+    // Z-score helper treats as "everyone's exactly average".
+    const leagueStdDev = {};
+    ANALYSIS_POSITIONS.concat(['BENCH']).forEach(pos=>{
+      const arr = pos === 'BENCH' ? benchTotals : totalsByPos[pos];
+      const n = arr.length || 1;
+      const avg = arr.reduce((s,v)=> s + v, 0) / n;
+      const variance = arr.reduce((s,v)=> s + Math.pow(v - avg, 2), 0) / n;
+      leagueAvg[pos] = avg;
+      leagueStdDev[pos] = Math.sqrt(variance);
     });
     teams.forEach(t=>{
       ANALYSIS_POSITIONS.forEach(pos=>{
@@ -4102,8 +4549,9 @@ button{
         entry.isSurplus = avg > 0 && entry.total > CONFIG.SURPLUS_MULT * avg && entry.depth >= CONFIG.SURPLUS_MIN_BENCH_DEPTH;
         entry.isNeed = avg > 0 && entry.total < CONFIG.NEED_MULT * avg;
       });
+      byTeam[t.rosterId].BENCH.avg = leagueAvg.BENCH;
     });
-    return { byTeam, leagueAvg };
+    return { byTeam, leagueAvg, leagueStdDev };
   }
 
   // Per-position letter grade for the team-card dropdown: how this team's projected points at
@@ -4125,6 +4573,42 @@ button{
       grades[pos] = { ratio, grade: positionGradeFromRatio(ratio), total: entry ? entry.total : 0 };
     });
     return grades;
+  }
+
+  // ---------- Z-Score Positional Discrepancy Matrix ----------
+  // Z = (team's positional value - league average positional value) / league positional std
+  // dev. Unlike raw point totals, this says how much of a real competitive edge (or hole) a
+  // position actually is, relative to what everyone else in THIS league is running out there.
+  const MATRIX_POSITIONS = ['QB','RB','WR','TE','BENCH'];
+  const ZSCORE_TIERS = [
+    { min: 1.5, label: 'Elite', cls: 'z-elite' },
+    { min: 1.0, label: 'Strong', cls: 'z-strong' },
+    { min: 0.3, label: 'Above Avg', cls: 'z-above' },
+    { min: -0.3, label: 'Avg', cls: 'z-avg' },
+    { min: -1.0, label: 'Below Avg', cls: 'z-below' },
+    { min: -1.5, label: 'Vulnerable', cls: 'z-vuln' },
+    { min: -Infinity, label: 'Brittle', cls: 'z-brittle' }
+  ];
+  function zScoreTier(z){
+    return ZSCORE_TIERS.find(t=> z >= t.min) || ZSCORE_TIERS[ZSCORE_TIERS.length-1];
+  }
+  function positionZScore(total, pos, posStats){
+    const avg = (posStats.leagueAvg && posStats.leagueAvg[pos]) || 0;
+    const sd = (posStats.leagueStdDev && posStats.leagueStdDev[pos]) || 0;
+    if(sd < 0.0001) return 0;
+    return (total - avg) / sd;
+  }
+  // Per-team, per-position Z-scores, computed once at snapshot time from the same posProfile
+  // (and BENCH value) everything else on the page already uses — so the matrix can never
+  // disagree with the position grades shown elsewhere.
+  function buildZScores(t, posStats){
+    const scores = {};
+    MATRIX_POSITIONS.forEach(pos=>{
+      const entry = t.posProfile && t.posProfile[pos];
+      const total = entry ? entry.total : 0;
+      scores[pos] = positionZScore(total, pos, posStats);
+    });
+    return scores;
   }
 
   // Pairs teams whose surplus/need are mirror images of each other: team A is light at a
@@ -4469,6 +4953,123 @@ button{
     return discount !== undefined ? base * discount : base;
   }
 
+  // ---------- Unified 4-Step Analytical Pipeline: Stage 3 advanced feature layers ----------
+
+  // Active Asset Efficiency Score: total rest-of-season value divided by the number of
+  // currently-healthy, active roster spots. A team crushed by this week's letter grade because
+  // a star is out (e.g. a rostered RB1 on IR) can still carry a huge N_ROS relative to its
+  // shrunken healthy-body count — that's the "Sleeping Giant" signal: real long-term value that
+  // the platform's weekly grade is hiding. Empty/degenerate rosters fall back to rosPoints raw
+  // rather than dividing by zero.
+  function computeActiveAssetEfficiency(t){
+    const all = t.starters.concat(t.bench);
+    const healthyCount = all.filter(x=> !isUnavailable(x.player)).length;
+    if(healthyCount <= 0) return t.rosPoints || 0;
+    return (t.rosPoints || 0) / healthyCount;
+  }
+
+  // Next-Man-Up Fragility Score: for each of RB and WR, compares this team's average starting
+  // value at that position to the single best *healthy* bench replacement at the same position.
+  // A team whose starters badly outclass their own bench is one injury away from a real points
+  // cliff — the score is the negative sum of those drop-offs (more negative = more exposed),
+  // matching the pipeline's convention where -8.4 reads as "Brittle" and -2.1 reads as "Robust".
+  // Positions with no bench replacement at all count the full starter value as exposed, since
+  // there is genuinely nothing to plug the hole.
+  const FRAGILITY_POSITIONS = ['RB','WR'];
+  function computeFragilityScore(t, weekProjections, scoring, hist, rosWeekMaps){
+    let dropoff = 0;
+    FRAGILITY_POSITIONS.forEach(pos=>{
+      const startersAtPos = t.starters.filter(x=> x.player.position === pos);
+      if(!startersAtPos.length) return;
+      const avgStarterVal = startersAtPos.reduce((s,x)=> s + playerGradingValue(x, weekProjections, scoring, hist, rosWeekMaps), 0) / startersAtPos.length;
+      const benchCandidates = t.bench.filter(x=> x.player.position === pos && !isUnavailable(x.player));
+      const bestBenchVal = benchCandidates.reduce((max,x)=>{
+        const v = playerGradingValue(x, weekProjections, scoring, hist, rosWeekMaps);
+        return v > max ? v : max;
+      }, 0);
+      const gap = avgStarterVal - bestBenchVal;
+      if(gap > 0) dropoff += gap;
+    });
+    return -dropoff;
+  }
+  const FRAGILITY_TIERS = [
+    { min: -3, label: 'Robust', cls: 'z-elite' },
+    { min: -6, label: 'Stable', cls: 'z-above' },
+    { min: -9, label: 'Vulnerable', cls: 'z-vuln' },
+    { min: -Infinity, label: 'Brittle', cls: 'z-brittle' }
+  ];
+  function fragilityTier(score){
+    return FRAGILITY_TIERS.find(t=> score >= t.min) || FRAGILITY_TIERS[FRAGILITY_TIERS.length-1];
+  }
+
+  // Matchup Variance Filter: flags starters whose THIS-WEEK projection has been marked down
+  // hard relative to their normal per-game outlook (the platform "panic-downgrading" them for a
+  // tough matchup environment) while real-time Vegas odds for their own NFL team actually point
+  // to a friendly, high-scoring environment (a high O/U game, or being a solid favorite). That
+  // combination is the buy-low window: a nervous manager may be looking at the same scary weekly
+  // grade and be willing to sell a player Vegas thinks is fine.
+  function computeMatchupVarianceFlags(teams, oddsCtx, weekProjections, scoring, hist, rosWeekMaps){
+    const flags = [];
+    teams.forEach(t=>{
+      t.starters.forEach(x=>{
+        if(!['RB','WR','TE'].includes(x.player.position)) return;
+        if(isUnavailable(x.player)) return;
+        const normal = playerPotentialValue(x, weekProjections, scoring, hist, rosWeekMaps);
+        if(normal < 4) return; // ignore replacement-level players — no real "downgrade" story
+        const stats = weekProjections[x.playerId];
+        const thisWeek = stats ? projectedPointsFromStatLine(stats, scoring) : normal;
+        const downgradeRatio = thisWeek / normal;
+        const abbr = normAbbr(x.player.team);
+        const ctx = abbr && oddsCtx[abbr];
+        const highTotal = ctx && ctx.overUnder && ctx.overUnder >= 47;
+        const solidFavorite = ctx && ctx.favoredBy && ctx.favoredBy >= 6;
+        if(downgradeRatio < 0.75 && (highTotal || solidFavorite)){
+          flags.push({
+            rosterId: t.rosterId, fantasyTeam: t.fantasyTeam,
+            playerId: x.playerId, name: playerDisplayName(x.player), pos: x.player.position,
+            team: abbr, overUnder: ctx.overUnder, favoredBy: ctx.favoredBy,
+            downgradeRatio
+          });
+        }
+      });
+    });
+    flags.sort((a,b)=> a.downgradeRatio - b.downgradeRatio);
+    return flags;
+  }
+
+  // ---------- Stage 4: The Final Actionable Output Matrix ----------
+  // One-line, plain-English recommendation per team, checked in priority order: a Sleeping
+  // Giant (real long-term value hidden by a bad weekly grade) is the highest-value read; then a
+  // live buy-low window flagged by the Matchup Variance Filter; then a clean surplus-for-need
+  // trade alignment from the Z-score matrix; then a fragility warning if the roster is one
+  // injury from collapse; otherwise the roster is simply balanced.
+  function buildActionableRecommendation(t, buyLowFlags){
+    const gradeLetter = (t.grade || '').charAt(0);
+    if(['C','D','F'].includes(gradeLetter) && t.efficiencyZ >= 0.5){
+      return `Sleeping Giant: real long-term value (Asset Efficiency Z ${t.efficiencyZ>=0?'+':''}${t.efficiencyZ.toFixed(1)}) buried under a rough weekly grade — buy before the roster heals.`;
+    }
+    const myBuyLows = (buyLowFlags || []).filter(f=> f.rosterId === t.rosterId);
+    if(myBuyLows.length){
+      const b = myBuyLows[0];
+      const reason = b.overUnder ? `a ${b.overUnder.toFixed(1)} O/U game` : `being a solid favorite`;
+      return `Exploit Opportunity: ${b.name} (${escapeHtml(b.pos)}, ${escapeHtml(b.team||'')}) was downgraded this week despite ${reason} — buy low before the matchup panic fades.`;
+    }
+    const zs = t.zScores || {};
+    let bestPos = null, bestZ = -Infinity, worstPos = null, worstZ = Infinity;
+    ['QB','RB','WR','TE'].forEach(pos=>{
+      const z = zs[pos] || 0;
+      if(z > bestZ){ bestZ = z; bestPos = pos; }
+      if(z < worstZ){ worstZ = z; worstPos = pos; }
+    });
+    if(bestZ >= 1.0 && worstZ <= -1.0 && bestPos && worstPos && bestPos !== worstPos){
+      return `Trade Target: Send ${bestPos} depth (Z ${bestZ>=0?'+':''}${bestZ.toFixed(1)}) to acquire ${worstPos} help (Z ${worstZ.toFixed(1)}).`;
+    }
+    if(t.fragilityScore !== undefined && t.fragilityScore <= -7){
+      return `Fragile core (Fragility ${t.fragilityScore.toFixed(1)}) — prioritize a depth trade at RB/WR before one injury costs the season.`;
+    }
+    return `Balanced roster — no urgent action this week.`;
+  }
+
   // ---------- Orchestration ----------
   async function computeLeagueAnalysis(){
     const teams = buildTeamAnalysisData();
@@ -4487,6 +5088,14 @@ button{
     const winPct = teams.map(t=> teamWinPct(t.record));
     const nPF = minMaxNormalize(pf), nAPW = minMaxNormalize(apw), nROS = minMaxNormalize(ros), nWin = minMaxNormalize(winPct);
 
+    // Stage 2 of the Unified Pipeline: Power Ranking as a population Z-score of rest-of-season
+    // value (N_ROS), standardized against this league's own avg/STDEV.P — a distinct, more
+    // "pure asset value" read than the multi-factor PRS above, and the number the League Synergy
+    // Matrix leads with.
+    const rosAvg = ros.reduce((s,v)=> s+v, 0) / (ros.length || 1);
+    const rosVariance = ros.reduce((s,v)=> s + Math.pow(v - rosAvg, 2), 0) / (ros.length || 1);
+    const rosStdDev = Math.sqrt(rosVariance);
+
     teams.forEach((t,i)=>{
       t.norm = { pf: nPF[i], apw: nAPW[i], ros: nROS[i], winPct: nWin[i] };
       t.prs = (
@@ -4494,6 +5103,7 @@ button{
         CONFIG.PRS_W_ROS * nROS[i] + CONFIG.PRS_W_WINPCT * nWin[i]
       ) * 100;
       t.grade = gradeForPRS(t.prs);
+      t.rosZ = rosStdDev < 0.0001 ? 0 : (t.rosPoints - rosAvg) / rosStdDev;
     });
     teams.sort((a,b)=> b.prs - a.prs);
     teams.forEach((t,i)=> t.rank = i + 1);
@@ -4511,8 +5121,24 @@ button{
 
     // ---- Metric D + per-position grades ----
     const posStats = computePositionalSurplusNeed(teams, weekProjections, scoring, hist, rosData.weekMaps);
-    teams.forEach(t=>{ t.posProfile = posStats.byTeam[t.rosterId]; t.posGrades = buildPositionGrades(t); });
+    teams.forEach(t=>{ t.posProfile = posStats.byTeam[t.rosterId]; t.posGrades = buildPositionGrades(t); t.zScores = buildZScores(t, posStats); });
     const tradeSuggestions = suggestComplementaryTrades(teams, posStats);
+
+    // ---- Stage 3: Advanced feature layers (Active Asset Efficiency, Next-Man-Up Fragility,
+    // Matchup Variance Filter) + Stage 4: the Actionable Output Matrix ----
+    teams.forEach(t=>{
+      t.assetEfficiency = computeActiveAssetEfficiency(t);
+      t.fragilityScore = computeFragilityScore(t, weekProjections, scoring, hist, rosData.weekMaps);
+    });
+    const effVals = teams.map(t=> t.assetEfficiency);
+    const effAvg = effVals.reduce((s,v)=> s+v, 0) / (effVals.length || 1);
+    const effVariance = effVals.reduce((s,v)=> s + Math.pow(v - effAvg, 2), 0) / (effVals.length || 1);
+    const effStdDev = Math.sqrt(effVariance);
+    teams.forEach(t=>{ t.efficiencyZ = effStdDev < 0.0001 ? 0 : (t.assetEfficiency - effAvg) / effStdDev; });
+
+    const oddsCtx = oddsContextFromScoreboard(await fetchScoreboardForWeek(state.week));
+    const buyLowFlags = computeMatchupVarianceFlags(teams, oddsCtx, weekProjections, scoring, hist, rosData.weekMaps);
+    teams.forEach(t=>{ t.actionableRecommendation = buildActionableRecommendation(t, buyLowFlags); });
 
     // ---- Season Projected Grade ----
     const spgMap = await computeSeasonProjectedGrades(teams, hist, weekProjections, scoring, rosData.weekMaps);
@@ -4546,10 +5172,12 @@ button{
     const teamsOut = teams.map(t=> ({
       rosterId: t.rosterId, fantasyTeam: t.fantasyTeam, record: t.record,
       startersTotal: t.startersTotal,
-      prs: t.prs, grade: t.grade, rank: t.rank, norm: t.norm,
+      prs: t.prs, grade: t.grade, rank: t.rank, norm: t.norm, rosZ: t.rosZ,
       allPlayWinsRaw: t.allPlayWinsRaw, expectedWins: t.expectedWins, luckIndex: t.luckIndex,
       lineupEfficiencyPct: t.lineupEfficiencyPct, rosPoints: t.rosPoints,
-      swapAlerts: t.swapAlerts, posProfile: t.posProfile, posGrades: t.posGrades, spg: t.spg,
+      assetEfficiency: t.assetEfficiency, efficiencyZ: t.efficiencyZ,
+      fragilityScore: t.fragilityScore, actionableRecommendation: t.actionableRecommendation,
+      swapAlerts: t.swapAlerts, posProfile: t.posProfile, posGrades: t.posGrades, spg: t.spg, zScores: t.zScores,
       starters: t.starters.map(x=> sandboxPlayerFields(x, swapFlagIds[t.rosterId].has(x.playerId))),
       bench: t.bench.map(x=> sandboxPlayerFields(x, false))
     }));
@@ -4564,7 +5192,7 @@ button{
       })
     };
 
-    return { teams: teamsOut, tradeSuggestions, posAverages: posStats.leagueAvg, waiver: waiverOut };
+    return { teams: teamsOut, tradeSuggestions, buyLowFlags, posAverages: posStats.leagueAvg, waiver: waiverOut };
   }
 
   // ---------- Weekly analysis scheduling ----------
@@ -4589,7 +5217,7 @@ button{
   // Bump whenever computeLeagueAnalysis's output shape changes so a snapshot cached by an
   // older version of this dashboard (shared league-wide in window.storage) gets discarded
   // and recomputed instead of silently rendering without the newer fields.
-  const ANALYSIS_SCHEMA_VERSION = 5;
+  const ANALYSIS_SCHEMA_VERSION = 6;
 
   // Luck is "Processing" only in Week 1 before that week is final — re-render on a light poll
   // so the badge flips over to a real number without the user having to hit "Regenerate now".
@@ -4757,6 +5385,16 @@ button{
       title: 'Position Grades',
       plain: 'This shows, position by position, whether your team is stacked or thin compared to the rest of the league.',
       science: 'Each position grade compares a team total value at that position to the league-average total at that position: ratio = team total / league average. In Weeks 1-2 that total uses this week projected points (league scoring); from Week 3 on it switches to real season-to-date average points, since actual production is more reliable than a projection once there is a real sample. Ratio 1.4+ is A+, 1.2+ A, 1.05+ B, 0.9+ C, 0.75+ D, otherwise F.'
+    },
+    zmatrix: {
+      title: 'Positional Discrepancy Matrix (Z-Scores)',
+      plain: 'A raw point total can lie — a QB scoring 22 pts/week sounds great until you learn the league average starting QB scores 21.5, so that "strength" barely matters. A Z-score fixes that: it says how many standard deviations above or below the league average a position actually is. Anything at +1.0 or higher is a real, mathematical edge over your weekly opponents; anything below -1.0 is an active liability — the spot most worth targeting on the waiver wire or in trade talks.',
+      science: 'Z = (team positional value - league average positional value) / league positional standard deviation, computed separately per position (QB/RB/WR/TE) plus a Bench Depth column (skill-position bench value, the "next-man-up" score). Positional value uses the same grading input as Position Grades above (rest-of-season outlook in Weeks 1-2, season-to-date production from Week 3 on). League average and standard deviation are both computed across every team in this league. Tiers: Elite 1.5+, Strong 1.0+, Above Avg 0.3+, Avg -0.3 to 0.3, Below Avg -1.0 to -0.3, Vulnerable -1.5 to -1.0, Brittle below -1.5.'
+    },
+    synergy: {
+      title: 'League Synergy Matrix',
+      plain: 'The full 4-step pipeline in one table: raw rest-of-season value standardized into a Power Ranking Z-score, per-position Z-scores for WR/RB/TE, a Fragility Score for how exposed the team is to a single injury, and a plain-English recommendation that checks for a hidden "Sleeping Giant" (real value buried by a bad weekly grade), a live buy-low window from the Matchup Variance Filter, a clean surplus-for-need trade alignment, or a fragility warning, in that priority order.',
+      science: 'Power Ranking (ROS Z-Score) = (team rest-of-season projected points - league average) / league population standard deviation. WR/RB/TE Z-scores are the same positional Z-scores used in the Positional Discrepancy Matrix above. Fragility Score = -(sum over RB and WR of max(0, average healthy starter value at that position - best healthy bench replacement value at that position)); more negative means a bigger point cliff if a starter goes down. Active Asset Efficiency = rest-of-season points / count of currently-healthy active roster spots, then standardized the same way as Power Ranking; a below-average PRS grade combined with an above-average Asset Efficiency Z-score is flagged as a Sleeping Giant. The Matchup Variance Filter flags a starter when this week projection is under 75% of their normal per-game outlook while their real NFL team carries a Vegas over/under of 47+ or a 6+ point spread in their favor.'
     },
     swap: {
       title: 'Weekly Start/Sit',
@@ -4930,6 +5568,78 @@ button{
       ${rowsHtml}
       ${insightsHtml}
       ${notesHtml}`;
+  }
+
+  // Heatmap table: one row per team, one column per position (+ Bench Depth), each cell a
+  // Z-score with a tier label. Sorted by average Z-score across the shown positions, so the
+  // most consistently stacked rosters float to the top.
+  function renderZScoreMatrix(teams){
+    if(!teams || !teams.length) return '<div class="analysis-note" style="margin:0;">No roster data available yet.</div>';
+    const ranked = teams.slice().sort((a,b)=>{
+      const avgA = MATRIX_POSITIONS.reduce((s,p)=> s + ((a.zScores && a.zScores[p]) || 0), 0) / MATRIX_POSITIONS.length;
+      const avgB = MATRIX_POSITIONS.reduce((s,p)=> s + ((b.zScores && b.zScores[p]) || 0), 0) / MATRIX_POSITIONS.length;
+      return avgB - avgA;
+    });
+    const headCells = MATRIX_POSITIONS.map(p=> `<th>${p === 'BENCH' ? 'Bench Depth' : p}</th>`).join('');
+    const rows = ranked.map(t=>{
+      const cells = MATRIX_POSITIONS.map(pos=>{
+        const z = (t.zScores && t.zScores[pos]) || 0;
+        const tier = zScoreTier(z);
+        return `<td class="zcell ${tier.cls}"><span class="zval">${z >= 0 ? '+' : ''}${z.toFixed(1)}</span><span class="ztier">${escapeHtml(tier.label)}</span></td>`;
+      }).join('');
+      return `<tr><td class="zteam">${escapeHtml(t.fantasyTeam)}</td>${cells}</tr>`;
+    }).join('');
+    return `<div class="zmatrix-wrap"><table class="zmatrix">
+      <thead><tr><th>Team</th>${headCells}</tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>`;
+  }
+
+  // ---------- UI: League Synergy Matrix (Stage 4 of the Unified Pipeline) ----------
+  // One row per team: Power Ranking as a Z-score of rest-of-season value, WR/RB/TE Z-scores,
+  // the Next-Man-Up Fragility Score, and the single actionable recommendation Stage 4 produced
+  // for that team. Sorted by Power Ranking Z so the strongest asset bases float to the top.
+  function renderSynergyMatrix(teams){
+    if(!teams || !teams.length) return '<div class="analysis-note" style="margin:0;">No roster data available yet.</div>';
+    const ranked = teams.slice().sort((a,b)=> (b.rosZ||0) - (a.rosZ||0));
+    const rows = ranked.map(t=>{
+      const rosZ = t.rosZ || 0;
+      const rosTier = zScoreTier(rosZ);
+      const posCells = ['WR','RB','TE'].map(pos=>{
+        const z = (t.zScores && t.zScores[pos]) || 0;
+        const tier = zScoreTier(z);
+        return `<td class="zcell ${tier.cls}"><span class="zval">${z >= 0 ? '+' : ''}${z.toFixed(1)}</span><span class="ztier">${escapeHtml(tier.label)}</span></td>`;
+      }).join('');
+      const frag = t.fragilityScore !== undefined ? t.fragilityScore : 0;
+      const fragTier = fragilityTier(frag);
+      return `<tr>
+        <td class="zteam">${escapeHtml(t.fantasyTeam)}</td>
+        <td class="zcell ${rosTier.cls}"><span class="zval">${rosZ >= 0 ? '+' : ''}${rosZ.toFixed(1)}</span><span class="ztier">${escapeHtml(rosTier.label)}</span></td>
+        ${posCells}
+        <td class="zcell ${fragTier.cls}"><span class="zval">${frag.toFixed(1)}</span><span class="ztier">${escapeHtml(fragTier.label)}</span></td>
+        <td class="synergy-rec">${escapeHtml(t.actionableRecommendation || '—')}</td>
+      </tr>`;
+    }).join('');
+    return `<div class="zmatrix-wrap"><table class="zmatrix synergy-matrix">
+      <thead><tr><th>Team</th><th>Power Ranking<br>(ROS Z-Score)</th><th>WR Z</th><th>RB Z</th><th>TE Z</th><th>Fragility</th><th>Actionable Recommendation</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>`;
+  }
+
+  // Buy-low callouts from the Matchup Variance Filter: real-time Vegas context contradicting
+  // the platform's own weekly downgrade for a rostered starter.
+  function renderBuyLowFlags(flags){
+    if(!flags || !flags.length){
+      return '<div class="analysis-note" style="margin:0;">No matchup-variance buy-low windows detected this week.</div>';
+    }
+    return '<div class="trade-suggest-grid">' + flags.slice(0,8).map(f=>{
+      const reason = f.overUnder ? `${f.overUnder.toFixed(1)} O/U` : `favored by ${f.favoredBy}+`;
+      return `
+      <div class="trade-suggest-card">
+        <div class="trade-suggest-teams"><b>${escapeHtml(f.name)}</b> <span style="color:var(--text-faint);">(${escapeHtml(f.pos)}, ${escapeHtml(f.team||'')})</span></div>
+        <div class="trade-suggest-line">Rostered by <b>${escapeHtml(f.fantasyTeam)}</b> — projection cut to ${Math.round(f.downgradeRatio*100)}% of normal despite a ${escapeHtml(reason)} matchup.</div>
+      </div>`;
+    }).join('') + '</div>';
   }
 
   function renderPowerRankings(teams){
@@ -5225,12 +5935,18 @@ button{
     html += renderPowerRankings(snapshot.teams);
     html += '</div>';
 
-    html += `<div class="analysis-section" id="sectionTradeRecs">${renderSectionHead('Trade Recommendations', 'complementary surplus / need pairings', 'trades')}`;
-    html += renderTradeRecommendations(snapshot.tradeSuggestions || []);
+    html += `<div class="analysis-section" id="sectionZMatrix">${renderSectionHead('Positional Discrepancy Matrix', 'Z-scores vs. league average, position by position', 'zmatrix')}`;
+    html += renderZScoreMatrix(snapshot.teams);
     html += '</div>';
 
-    html += `<div class="analysis-section" id="sectionWaiverRecs">${renderSectionHead('Waiver Recommendations', 'ranked by projected value added &amp; add velocity', 'waiver')}`;
-    html += renderWaiverRecommendations(snapshot.waiver);
+    html += `<div class="analysis-section" id="sectionSynergy">${renderSectionHead('League Synergy Matrix', 'the unified 4-step pipeline: power ranking, positional Z-scores, fragility &amp; the actionable read', 'synergy')}`;
+    html += renderSynergyMatrix(snapshot.teams);
+    html += '<div class="debug-section-title" style="margin-top:16px;">Matchup Variance Filter — buy-low windows</div>';
+    html += renderBuyLowFlags(snapshot.buyLowFlags || []);
+    html += '</div>';
+
+    html += `<div class="analysis-section" id="sectionTradeRecs">${renderSectionHead('Trade Recommendations', 'complementary surplus / need pairings', 'trades')}`;
+    html += renderTradeRecommendations(snapshot.tradeSuggestions || []);
     html += '</div>';
 
     html += `<div class="analysis-section" id="sectionSandbox">${renderSectionHead('Trade &amp; Waiver Sandbox', 'build a hypothetical move and see the point impact', 'sandbox')}`;
@@ -5245,13 +5961,15 @@ button{
     refreshSidebarLuckEfficiency(snapshot.teams);
   }
 
-  // Jump nav: quick-scroll buttons to the three sections furthest down the page (the ones
-  // most worth a shortcut — trade recs, waiver recs, and the sandbox — since the power
-  // rankings are already right at the top).
+  // Jump nav: quick-scroll buttons to the sections furthest down the page (the ones most
+  // worth a shortcut — trade recs and the sandbox — since the power rankings are already
+  // right at the top). Waiver Recs was removed as a standalone section; its underlying data
+  // (computeWaiverTargets) is untouched and still feeds the sandbox's "Add from waivers" list.
   function renderJumpNav(){
     return `<div class="jump-nav">
+      <button type="button" class="jump-btn" data-jump="sectionZMatrix">Z-Score Matrix</button>
+      <button type="button" class="jump-btn" data-jump="sectionSynergy">Synergy Matrix</button>
       <button type="button" class="jump-btn" data-jump="sectionTradeRecs">Trade Recs</button>
-      <button type="button" class="jump-btn" data-jump="sectionWaiverRecs">Waivers to Watch</button>
       <button type="button" class="jump-btn" data-jump="sectionSandbox">Trade/Waiver Sandbox</button>
     </div>`;
   }
@@ -6291,6 +7009,7 @@ button{
       await rememberLeague(leagueId);
       await refresh(true);
       await backfillInjuriesFromPlayByPlay();
+      maybeShowMissedModal();
       ensureAnalysisFresh(false);
       ensureNewsFresh(false);
       startPolling();
@@ -6321,6 +7040,12 @@ button{
     }
   });
   $('#refreshBtn').addEventListener('click', ()=>refresh(false));
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape'){
+      const host = $('#missedModalHost');
+      if(host && host.style.display !== 'none') closeMissedModal();
+    }
+  });
   $('#playFeed').addEventListener('click', (e)=>{
     const item = e.target.closest('.play-item-clickable');
     if(!item) return;
@@ -6547,6 +7272,8 @@ button{
 
   // Try to auto-connect: prefer a remembered league, otherwise fall back to the default
   (async function init(){
+    const badge = $('#versionBadge');
+    if(badge) badge.textContent = `v${APP_VERSION}`;
     const remembered = await recallLeague();
     const leagueId = remembered || DEFAULT_LEAGUE_ID;
     $('#leagueInput').value = leagueId;
